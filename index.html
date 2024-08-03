@@ -29,6 +29,8 @@
             height: auto;
             object-fit: cover;
             max-height: 100vh;
+            /* Safari specific prefix */
+            -webkit-object-fit: cover;
         }
 
         .unmute-button {
@@ -46,11 +48,11 @@
 </head>
 <body>
     <div class="video-container">
-        <video id="video1" autoplay muted>
+        <video id="video1" autoplay muted playsinline>
             <source src="1.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <video id="video2" style="display:none;" muted>
+        <video id="video2" style="display:none;" muted playsinline>
             <source src="2.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
