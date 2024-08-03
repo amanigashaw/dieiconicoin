@@ -10,44 +10,43 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: black;
             overflow: hidden;
+            background-color: black;
         }
 
         .video-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            transform: translate(-50%, -50%);
-            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
         }
 
         video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
             width: 100%;
-            height: 100%;
-            transform: translate(-50%, -50%);
-            object-fit: cover; /* Maintains aspect ratio and covers the entire container */
+            height: auto;
+            object-fit: cover;
+            max-height: 100vh;
         }
 
-        .loading {
-            color: white;
-            text-align: center;
-            font-size: 2em;
+        .unmute-button {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="video-container">
-        <video id="video1" muted>
+        <video id="video1" autoplay muted>
             <source src="1.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -55,40 +54,41 @@
             <source src="2.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <div id="loading" class="loading">Loading...</div>
+        <button class="unmute-button" id="unmuteButton">Unmute</button>
     </div>
 
     <script>
-        // Get references to the video elements and the loading message
         const video1 = document.getElementById('video1');
         const video2 = document.getElementById('video2');
-        const loadingMessage = document.getElementById('loading');
+        const unmuteButton = document.getElementById('unmuteButton');
 
-        function startVideo(video) {
-            video.play().catch(error => {
-                console.error('Error playing video:', error);
-            });
+        function restartVideos() {
+            video1.style.display = 'block';
+            video2.style.display = 'none';
+            video1.currentTime = 0;
+            video2.currentTime = 0;
+            video1.play();
         }
 
-        // When the first video is ready to play through
-        video1.addEventListener('canplaythrough', function() {
-            loadingMessage.style.display = 'none'; // Hide loading message
-            startVideo(video1); // Start the first video
-        });
-
-        // When the first video ends
         video1.addEventListener('ended', function() {
-            video1.style.display = 'none'; // Hide the first video
-            video2.style.display = 'block'; // Show the second video
-            video2.addEventListener('canplaythrough', function() {
-                startVideo(video2); // Start the second video when ready
-            });
+            video1.style.display = 'none';
+            video2.style.display = 'block';
+            video2.play();
         });
 
-        // Start loading video1 when the page loads
+        video2.addEventListener('ended', function() {
+            restartVideos();
+        });
+
         window.addEventListener('load', function() {
-            loadingMessage.style.display = 'block'; // Show loading message
-            video1.load(); // Load the first video
+            video1.play();
+        });
+
+        unmuteButton.addEventListener('click', function() {
+            const isMuted = video1.muted;
+            video1.muted = !isMuted;
+            video2.muted = !isMuted;
+            unmuteButton.textContent = isMuted ? 'Mute' : 'Unmute';
         });
     </script>
 </body>
