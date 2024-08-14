@@ -88,7 +88,7 @@
 
         unmuteButton.addEventListener('click', function() {
             const isMuted = video1.muted;
-            // video1.muted = !isMuted;
+            video1.muted = !isMuted;
             video2.muted = !isMuted;
             unmuteButton.textContent = isMuted ? 'Mute' : 'Unmute';
         });
